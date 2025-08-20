@@ -8,7 +8,7 @@
 # *#a.2.1* if a line is selected then the grep command will show the line, if no line is selected then it will output nothing, but we are sending the output of this command to devnull (which just suppresses/ignores whatever comes to it).<br>
 # *#a.3* But the grep program exit code (returncode) is 0 if a line is selected (a pattern is found) and 1 if a line is not selected (no pattern found) but the program ran successfully and 2 if the program fails.<br>
 # *#a.3.1* Decide which service to use in this system.
-# 
+# ###########
 
 # In[ ]:
 
