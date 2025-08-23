@@ -49,16 +49,18 @@ cd log-investigator-cli/python-files
 ---
 
 ## 📂 Project Structure  
-*Note :   .(dot) is referred to python-files*
 
 ```bash
-.
-├── main.py                 # CLI entry point
-├── journald_log_parser.py  # Handles journald log fetching
-├── log_reader.py           # Reads and processes log data
-├── ioc_extractor.py        # Regex patterns to extract IOCs
-├── output_handler.py       # Handles output (stdout, file, etc.)
-└── ssh_test.log            # Sample SSH logs for testing
+log-investigator-cli/        # Repo root (GitHub Repo Name)
+├── python-files/            # Code directory (Python package)
+│   ├── main.py
+│   ├── journald_log_parser.py
+│   ├── log_reader.py
+│   ├── ioc_extractor.py
+│   ├── check_ssh_or_sshd.py
+│   └── output_handler.py
+└── README.md
+
 
 ```
 
@@ -79,7 +81,7 @@ cd log-investigator-cli/python-files
 
 ---
  
- 📌 Example Output
+ 📌 Sample Extracted IOCs
  ```bash
 {'service': 'sshd', 'username': 'admin', 'ip': '192.168.1.45', 'timestamp': 'Aug 23 14:42:11'}
 {'service': 'sshd', 'username': 'root', 'ip': '203.0.113.55', 'timestamp': 'Aug 23 14:42:15'}
