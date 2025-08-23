@@ -25,7 +25,7 @@ Currently supports **SSH log analysis**, with **sudo log parsing** planned for f
 Clone the repo:
 ```bash
 git clone https://github.com/bkuldipya/log-investigator-cli.git
-cd log-investigator-cli
+cd log-investigator-cli/python-files
 ```
 
 ---
