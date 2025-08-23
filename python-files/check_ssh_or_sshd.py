@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+# In[ ]:
+
+
 # **Program to check if ssh.service is there or sshd.service is there in the system**<br>
 # *#a.1*  running `systemctl list-units --all` and sending the output of this command to the file. <br>
 # *#a.1.1* save all units whether they are inactive/active managed by systemd to a file.<br>
@@ -9,6 +12,7 @@
 # *#a.3* But the grep program exit code (returncode) is 0 if a line is selected (a pattern is found) and 1 if a line is not selected (no pattern found) but the program ran successfully and 2 if the program fails.<br>
 # *#a.3.1* Decide which service to use in this system.
 # 
+
 
 # In[ ]:
 

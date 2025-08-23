@@ -1,12 +1,16 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+# In[ ]:
+
+
 # **ioc_extractor module tasks:**<br>
 # Performs pattern matching and extraction of Indicators of Compromise (IOCs) from individual log lines.<br>
 # 1.Uses regex to detect and parse failed SSH login attempts from log lines.<br>
 # 2.Extracts relevant fields: timestamp, service, username, IP address.<br>
 # 3.Returns a dictionary with IOC details or None if no IOC found.<br>
 # 4.Encapsulates all logic related to IOC identification.<br>
+
 
 # In[ ]:
 
@@ -31,11 +35,14 @@ def extracted_iocs(log_line):                                                   
         d["ip"] = str(match_ssh.group(4))
         d["timestamp"] = str(match_ssh.group(1))
 
-    if d:
+    if d:                                                                                          #3.4
         return d
-    else:
+    else:                                                                                          #3.5
         return None
 
+
+
+# In[ ]:
 
 
 #Extracts IOCs(ip,timestamp,username) from a given log line using regex
@@ -55,23 +62,24 @@ def extracted_iocs(log_line):                                                   
 
 #3.1each log line is a string
 #3.2treat this as a local variable, so as to create a new empty dict everytime for each new log line
-#3.3converting to string so if want to convert to json then can do it
-#3.4if d is not empty then do it (if empty then it means it is false)
-#3.5 returns empty {} only when there is no match but not good for long lines where ssh/sudo not there
-#test: 
-extracted_iocs("Aug 12 19:00:01 server sshd[12345]: Accepted password for alice from 192.168.1.10 port 54321 ssh2")
-extracted_iocs("Aug 12 19:05:15 server sshd[12346]: Failed password for invalid user bob from 10.0.0.5 port 2222 ssh2")
+#3.3converting to string so if want to convert to json then the syntax doesn't breaks, as for json key-value pair needed to be of type str
+#3.4if d is not empty then execute (if it is empty means the condition becomes false)
+#3.5returns None, when there is no match
+
 
 # In[ ]:
 
 
-sudo_pattern = (r"([A-Z][a-z]{2}[ ]+\d+ \d+\:\d+\:\d+) "     #2.1
- r"\w+ "                                                     #2.2
- r"sudo\[\d+\]\:[ \t]"
- r"[^;]+\;[^;]+\;[^;]+\;[ \t]COMMAND=(.*)" 
-)
+#later implementation --ignore for now
 
-match_sudo = re.search(sudo_pattern,log_line,flags=re.IGNORECASE)
- elif match_sudo:
-        d["command"]=str(match_sudo.group(2))
+#sudo_pattern = (r"([A-Z][a-z]{2}[ ]+\d+ \d+\:\d+\:\d+) "     #2.1
+# r"\w+ "                                                     #2.2
+# r"sudo\[\d+\]\:[ \t]"
+# r"[^;]+\;[^;]+\;[^;]+\;[ \t]COMMAND=(.*)" 
+#)
+
+#match_sudo = re.search(sudo_pattern,log_line,flags=re.IGNORECASE)
+# elif match_sudo:
+#        d["command"]=str(match_sudo.group(2))
+
 
