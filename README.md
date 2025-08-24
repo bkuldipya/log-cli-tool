@@ -25,7 +25,7 @@ Currently supports **SSH log analysis**, with **sudo log parsing** planned for f
 Clone the repo:
 ```bash
 git clone https://github.com/bkuldipya/log-investigator-cli.git
-cd log-investigator-cli/python-files
+cd log-investigator-cli/ligator
 ```
 
 ---
@@ -51,14 +51,14 @@ cd log-investigator-cli/python-files
 ## 📂 Project Structure  
 
 ```bash
-log-investigator-cli/        # Repo root (GitHub Repo Name)
-├── python-files/            # Code directory (Python package)
-│   ├── main.py
-│   ├── journald_log_parser.py
-│   ├── log_reader.py
-│   ├── ioc_extractor.py
-│   ├── check_ssh_or_sshd.py
-│   └── output_handler.py
+log-investigator-cli/           # Repo root (GitHub Repo Name)
+├── ligator/                    # Code directory (Python package)
+│   ├── main.py                 # CLI entry point (
+│   ├── journald_log_parser.py  # Handles journald log fetching
+│   ├── log_reader.py           # Reads and processes log data
+│   ├── ioc_extractor.py        # Regex patterns to extract IOCs
+│   ├── check_ssh_or_sshd.py    #check if you system has ssh.service or sshd.service
+│   └── output_handler.py       # Handles output (stdout, file, etc.)
 └── README.md
 
 
