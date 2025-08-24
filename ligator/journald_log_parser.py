@@ -4,29 +4,37 @@
 # In[ ]:
 
 
-import subprocess                                                                  #1.1
+# See "docs/journald_log_parser.md" for explanations (comments)
+
+import subprocess                                                                     #1.1
 
 
-def parse_static(*args):                                                           #a.1
-    li = ["journalctl"] 
-    li.extend(args)                                                                #a.2
-    CPObject = subprocess.run(li,capture_output=True,text=True)                    #a.3
+def parse_static(*args,since=None,until=None):                                        #a.1
+    result_li = []
+    for flag in args:                                                                 #b.1
+        li = ["journalctl"]    
 
-    if CPObject.returncode == 0:                                                   #a.4
-        return CPObject.stdout
+        li.append(flag)                                                               #a.2
 
-    else:
-        return "Error: "+CPObject.stderr
+        if since and until :
+            temp = ["--since",since,"--until",until]
+            li.extend(temp)
+        elif since:
+            temp = ["--since",since]
+            li.extend(temp)
+        elif until:
+            temp = ["--until",until]
+            li.extend(temp)
+
+        CPObject = subprocess.run(li,capture_output=True,text=True)                    #a.3
+
+        if CPObject.returncode == 0:                                                   #a.4
+            result_li.append(CPObject.stdout)                                          #b.2
+
+        else:
+            result_li.append("Error: "+CPObject.stderr)
+
+    return result_li
 
 
-# In[ ]:
-
-
-#subprocess is used to spawn(launch) new processes.
-#a.1 To get arbitrary number of arguments. args(local variable) will collect all the arguments and store them in a tuple<br>
-#a.2 extend takes an iterable as an input and appends the elements of that iterable to the object in which the method is called upon.
-#a.3 subprocess.run returns a CompletedProcessObject. Here, my program waits for other program to finish and then after the child process gets
-#finished it returns a CompletedProcessObject. This object has attributes from which we can know the output of the child process and even errors, returncode too.
-#Also, as the default argument text=True is set then the input/output for the child program is of type string not bytes.
-#a.4 If the program ran successfully then the exit code is 0. If the exit code is something else then it prints the errors.
 
