@@ -70,8 +70,8 @@ try:                                                                         #a.
     #mode is file
     if args.mode == "file":
         if args.path is not None:
-            for extracted_iocs in log_reader.parse_logs_from_file(args.path):             #c.1  #generator object, you have to force evaluation
-                output_handler.handle_output(extracted_iocs,args.output)
+            for lineno,extracted_iocs in log_reader.parse_logs_from_file(args.path):             #c.1  #generator object, you have to force evaluation
+                output_handler.handle_output(lineno,extracted_iocs,args.output)    #changed
         else:
             print("Provide the path to the log file that you want to parse and extract the IOCs of ssh logs",file=sys.stderr)   #b.1 #b.2
 
@@ -101,8 +101,8 @@ try:                                                                         #a.
 
             #send logs to be read by log_reader and send one by one to ioc_extractor to get IOCs
             else:
-                for extracted_iocs in log_reader.parse_logs_static(log_data):             #c.2 
-                    output_handler.handle_output(extracted_iocs,args.output)   
+                for lineno,extracted_iocs in log_reader.parse_logs_static(log_data):             #c.2 
+                    output_handler.handle_output(lineno,extracted_iocs,args.output)   
 
 
         sys.exit(0)                                                           #exit (program ran successfully)

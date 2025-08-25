@@ -14,9 +14,9 @@
 
 import json
 
-def handle_output(extracted_iocs,output):
+def handle_output(lineno,extracted_iocs,output):
     if output is None:
-        print(extracted_iocs)
+        print(f"Line No: {lineno}",extracted_iocs,sep="   ")                                    #changed
 
     else:
         with open(output,"a") as f:
@@ -30,4 +30,10 @@ def handle_errors(string,output):
             f.write(string+"\n")
 
 
+
+
+# In[ ]:
+
+
+#two types of output - pp and single line compact
 

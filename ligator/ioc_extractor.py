@@ -17,7 +17,7 @@ import re
 ssh_pattern = (r"([A-Z][a-z]{2}[ ]+\d+ \d+\:\d+\:\d+) "                                             #1.1
  r"\w+ "                                                                                            #1.2 
  r"(\w+)\[\d+\]\: "                                                                                 #1.3
- r"failed password (?:for invalid user|for user|for) (\w+) from (\d+\.\d+\.\d+\.\d+) port \d+ \w+"  #1.4
+ r"(failed|accepted) (password|publickey) (?:for invalid user|for user|for) (\w+) from (\d+\.\d+\.\d+\.\d+) port \d+ \w+"  #1.4 #1.4.U#changed             
 ) 
 
 
@@ -27,10 +27,15 @@ def extract_iocs(log_line):                                                     
 
 
     if match_ssh:
-        extracted_iocs["service"] = str(match_ssh.group(2))
-        extracted_iocs["username"] = str(match_ssh.group(3))                                                    #3.3
-        extracted_iocs["ip"] = str(match_ssh.group(4))
+        extracted_iocs["auth_status"] = str(match_ssh.group(3))
+        extracted_iocs["auth_methods"] = str(match_ssh.group(4))
+        extracted_iocs["username"] = str(match_ssh.group(5))
+        extracted_iocs["ip"] = str(match_ssh.group(6))
         extracted_iocs["timestamp"] = str(match_ssh.group(1))
+        extracted_iocs["log_source"] = str(match_ssh.group(2))
+                                                           #3.3
+
+
 
     if extracted_iocs:                                                                                          #3.4
         return extracted_iocs
