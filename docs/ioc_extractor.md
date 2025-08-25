@@ -18,10 +18,16 @@ Output - dictionary containing iocs<br>
 
 ---
 ### Comments
+If there is U in the comment no, then that code line has been updated<br>
 \# 1.1 timestamp<br>
 \# 1.2 hostname(name of the computer)<br>
 \# 1.3 service name and service id(pid) also capturing the service to know what type of log<br>
 \# 1.4 log line<br>
+\#1.4.U Extracting Sucessful Login attempts too. <br>
+\#There are two ways a successul authentication can happen<br>
+1. When the client provides the correct password (password-based authentication).<br>
+2. When the client proves ownership of a private key that matches the server's authorized public key (key-based authentication).<br><br>
+
 
 
 \# 2.1 timestamp<br>
