@@ -55,14 +55,14 @@ log-investigator-cli/           # Repo root (GitHub Repo Name)
 │
 ├── ligator/                    # Code directory (Python package) (all source code)
 │   ├── main.py                 # CLI entry point 
-│   ├── journald_log_parser.py  # Handles journald log fetching
+│   ├── journald_fetcher.py  # Handles journald log fetching
 │   ├── log_reader.py           # Reads and processes log data
 │   ├── ioc_extractor.py        # Regex patterns to extract IOCs
 │   └── output_handler.py       # Handles output (stdout, file, etc.)
 │
 ├── docs/                       # Documentation
 │   ├── main.md                 # Explanation of main.py and contains actual comments 
-│   ├── journald_log_parser.md  # Explanation of journald_log_parser.py and contains actual comments
+│   ├── journald_fetcher.md  # Explanation of journald_log_parser.py and contains actual comments
 │   ├── log_reader.md           # Explanation of log_reader.py and contains actual comments
 │   ├── ioc_extractor.md        # Explanation of ioc_extractor.py and contains actual comments
 │   └── output_handler.md       # Explanation of output_handler.py and contains actual comments
