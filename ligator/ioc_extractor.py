@@ -21,19 +21,19 @@ ssh_pattern = (r"([A-Z][a-z]{2}[ ]+\d+ \d+\:\d+\:\d+) "                         
 ) 
 
 
-def extracted_iocs(log_line):                                                                      #3.1
-    d = {}                                                                                         #3.2
+def extract_iocs(log_line):                                                                      #3.1
+    extracted_iocs = {}                                                                                         #3.2
     match_ssh = re.search(ssh_pattern,log_line,flags=re.IGNORECASE)
 
 
     if match_ssh:
-        d["service"] = str(match_ssh.group(2))
-        d["username"] = str(match_ssh.group(3))                                                    #3.3
-        d["ip"] = str(match_ssh.group(4))
-        d["timestamp"] = str(match_ssh.group(1))
+        extracted_iocs["service"] = str(match_ssh.group(2))
+        extracted_iocs["username"] = str(match_ssh.group(3))                                                    #3.3
+        extracted_iocs["ip"] = str(match_ssh.group(4))
+        extracted_iocs["timestamp"] = str(match_ssh.group(1))
 
-    if d:                                                                                          #3.4
-        return d
+    if extracted_iocs:                                                                                          #3.4
+        return extracted_iocs
     else:                                                                                          #3.5
         return None
 

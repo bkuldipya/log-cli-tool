@@ -16,7 +16,7 @@ import sys
 import argparse
 import log_reader
 import output_handler
-import journald_log_parser
+import journald_fetcher
 
 
 parser = argparse.ArgumentParser(description="Log Investigator CLI Tool")                  #1.1  #1.2
@@ -70,8 +70,8 @@ try:                                                                         #a.
     #mode is file
     if args.mode == "file":
         if args.path is not None:
-            for ioc in log_reader.parse_log_file(args.path):             #c.1  #generator object, you have to force evaluation
-                output_handler.handle_output(ioc,args.output)
+            for extracted_iocs in log_reader.parse_logs_from_file(args.path):             #c.1  #generator object, you have to force evaluation
+                output_handler.handle_output(extracted_iocs,args.output)
         else:
             print("Provide the path to the log file that you want to parse and extract the IOCs of ssh logs",file=sys.stderr)   #b.1 #b.2
 
@@ -83,24 +83,27 @@ try:                                                                         #a.
 
         #check for which service the user wants the iocs
         if args.service == "ssh" :
-            filter_comm = ["_COMM=sshd"]                                            #e.1
+            target_source = ["_COMM=sshd"]                                            #e.1
         elif args.service == "sudo":
-            filter_comm = ["_COMM=sudo"]
+            target_source = ["_COMM=sudo"]
         else:
-            filter_comm = ["_COMM=sshd","_COMM=sudo"]
+            target_source = ["_COMM=sshd","_COMM=sudo"]
 
 
         #get the logs first from the journald
-        logs_output = journald_log_parser.parse_static(*filter_comm,since=args.since,until=args.until)       #e.2 #e.3
+        log_results = journald_fetcher.fetch_journal_logs(*target_source,since=args.since,until=args.until)       #e.2 #e.3
 
 
-        for result in logs_output:
-            #send logs to be parsed and get IOCs
-            if result.startswith("Error"):
-                output_handler.handle_errors(result,args.output)
+        for log_data in log_results:
+
+            if log_data.startswith("Error"):
+                output_handler.handle_errors(log_data,args.output)
+
+            #send logs to be read by log_reader and send one by one to ioc_extractor to get IOCs
             else:
-                for ioc in log_reader.parse_log_static(result):             #c.2 
-                    output_handler.handle_output(ioc,args.output)   
+                for extracted_iocs in log_reader.parse_logs_static(log_data):             #c.2 
+                    output_handler.handle_output(extracted_iocs,args.output)   
+
 
         sys.exit(0)                                                           #exit (program ran successfully)
 

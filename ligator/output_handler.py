@@ -14,13 +14,13 @@
 
 import json
 
-def handle_output(ioc_dict,output):
+def handle_output(extracted_iocs,output):
     if output is None:
-        print(ioc_dict)
+        print(extracted_iocs)
 
     else:
         with open(output,"a") as f:
-            f.write(json.dumps(ioc_dict)+"\n")                     #1.1
+            f.write(json.dumps(extracted_iocs)+"\n")                     #1.1
 
 def handle_errors(string,output):
     if output is None:
