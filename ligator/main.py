@@ -9,6 +9,8 @@
 # See "docs/main.md" for explanations (comments)
 
 
+# \#f.1 By default argparse reformats help text (wraps lines, ignores indentation).Use formatter_class=argparse.RawTextHelpFormatter in ArgumentParser to preserve your spaces and newlines exactly.<br>
+
 # In[ ]:
 
 
@@ -19,13 +21,17 @@ import output_handler
 import journald_fetcher
 
 
-parser = argparse.ArgumentParser(description="Log Investigator CLI Tool")                  #1.1  #1.2
+parser = argparse.ArgumentParser(description="Log Investigator CLI Tool",
+                                formatter_class=argparse.RawTextHelpFormatter)                  #1.1  #1.2  #f.1
 
 
 parser.add_argument(
     "--mode",
     choices=["file","journald-static","journald-live"],
-    help='mode selection: "file" to parse a log file, "journald-static" to parse stored journald logs, "journald-live" for live streaming logs',
+    help=('mode selection: \n'
+    '    "file" to parse a log file\n' 
+    '    "journald-static" to parse stored journald logs\n'
+    '    "journald-live" for live streaming logs'),    
     type=str
 )
 parser.add_argument(
@@ -35,7 +41,10 @@ parser.add_argument(
 )
 parser.add_argument(
     "--service",
-    help='Specify which service logs to analyze: "ssh" for SSH login attempts, "sudo" for sudo command usage. Defaults to both if not provided.',
+    help=('Specify which service logs to analyze:\n'
+    '    "ssh" for SSH login attempts\n'
+    '    "sudo" for sudo command usage\n'
+    '     Defaults to both if not provided'),
     choices=['ssh','sudo'],
     type=str
 )        
@@ -54,7 +63,17 @@ parser.add_argument(
     help="choose where to save the extracted IOCS (provide a filename)",
     type=str
 )
-
+parser.add_argument(
+    "--format",
+    choices = ['ndjson','ndjson-pretty','text','text-compact'],
+    default = 'ndjson',
+    help=("Output format (default: %(default)s):\n"
+    "    ndjson         - Newline-delimited JSON (1 json object per line) (best for machine parsing).\n"
+    "    ndjson-pretty  - Newline-delimited JSON with indentation (human-readable).\n"
+    "    text           - Multiline structured text, verbose (human-readable).\n"
+    "    text-compact   - Single-line, log-style output, concise (human-readable)."),
+    type = str
+)
 
 
 args = parser.parse_args()                                                   #1.3
@@ -71,7 +90,7 @@ try:                                                                         #a.
     if args.mode == "file":
         if args.path is not None:
             for lineno,extracted_iocs in log_reader.parse_logs_from_file(args.path):             #c.1  #generator object, you have to force evaluation
-                output_handler.handle_output(lineno,extracted_iocs,args.output)    #changed
+                output_handler.handle_output(lineno,extracted_iocs,args.output,args.format)    #changed
         else:
             print("Provide the path to the log file that you want to parse and extract the IOCs of ssh logs",file=sys.stderr)   #b.1 #b.2
 
@@ -102,7 +121,7 @@ try:                                                                         #a.
             #send logs to be read by log_reader and send one by one to ioc_extractor to get IOCs
             else:
                 for lineno,extracted_iocs in log_reader.parse_logs_static(log_data):             #c.2 
-                    output_handler.handle_output(lineno,extracted_iocs,args.output)   
+                    output_handler.handle_output(lineno,extracted_iocs,args.output,args.format)   
 
 
         sys.exit(0)                                                           #exit (program ran successfully)
