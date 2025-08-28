@@ -9,8 +9,6 @@
 # See "docs/main.md" for explanations (comments)
 
 
-# \#f.1 By default argparse reformats help text (wraps lines, ignores indentation).Use formatter_class=argparse.RawTextHelpFormatter in ArgumentParser to preserve your spaces and newlines exactly.<br>
-
 # In[ ]:
 
 
@@ -21,8 +19,9 @@ import output_handler
 import journald_fetcher
 
 
+#a Create ArgumentParser object to define args for program and to parse them
 parser = argparse.ArgumentParser(description="Log Investigator CLI Tool",
-                                formatter_class=argparse.RawTextHelpFormatter)                  #1.1  #1.2  #f.1
+                                formatter_class=argparse.RawTextHelpFormatter)                  #a.1  #a.2  #a.3
 
 
 parser.add_argument(
@@ -41,7 +40,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "--service",
-    help=('Specify which service logs to analyze:\n'
+    help=('Specify which service logs to analyze:\n'                                                 #a.3
     '    "ssh" for SSH login attempts\n'
     '    "sudo" for sudo command usage\n'
     '     Defaults to both if not provided'),
@@ -76,31 +75,34 @@ parser.add_argument(
 )
 
 
-args = parser.parse_args()                                                   #1.3
+args = parser.parse_args()                                                   #a.4
 
-if len(sys.argv) == 1:                                                       #d.1 #d.2
+if len(sys.argv) == 1:                                                       #b.1
     print(f"No options provided. Use -h or --help for usage information.")
     sys.exit(1)
 
 
-try:                                                                         #a.1
+#c try-except-finally block to handle errors and file open/close
+try:                                                                         
 
-    #opening output file here if given by the user (opening manually so as to not to duplicate any code
+    #d code outside modes
+    #d.1 opening output file here if given by the user
     fh = None
     if args.output is not None:
         fh = open(args.output,"w")
 
 
+    #e code inside modes
     #checking mode and using the correct module
 
-    #mode is file
+    #If mode is file
     if args.mode == "file":
         if args.path is not None:
-            for lineno,extracted_iocs in log_reader.parse_logs_from_file(args.path):             #c.1  #generator object, you have to force evaluation
-                output_handler.handle_output(lineno,extracted_iocs,args.format,fh)    #passing file-like object
+            for lineno,extracted_iocs in log_reader.parse_logs_from_file(args.path):  #e.1  generator object, you have to force evaluation
+                output_handler.handle_output(lineno,extracted_iocs,args.format,fh)    #e.2 passing file-like object
 
         else:
-            print("Provide the path to the log file that you want to parse and extract the IOCs of ssh logs",file=sys.stderr)   #b.1 #b.2
+            print("Provide the path to the log file that you want to parse and extract the IOCs of ssh logs",file=sys.stderr)   #e.3 #e.4
 
         sys.exit(0)                                                        #exit (program ran successfully)
 
@@ -111,22 +113,22 @@ try:                                                                         #a.
 
         #check for which service the user wants the iocs
         if args.service == "ssh" :
-            target_source = ["_COMM=sshd"]                                            #e.1
+            target_source = ["_COMM=sshd"]                                            #e.5
         elif args.service == "sudo":
             target_source = ["_COMM=sudo"]
         else:
             target_source = ["_COMM=sshd","_COMM=sudo"]
 
         #get the logs first from the journald
-        log_results = journald_fetcher.fetch_journal_logs(*target_source,since=args.since,until=args.until)       #e.2 #e.3
+        log_results = journald_fetcher.fetch_journal_logs(*target_source,since=args.since,until=args.until)       #e.6 #e.7
 
-        for log_data in log_results:
+        for log_data in log_results:                                                         #e.8
             if log_data.startswith("Error"):
                 output_handler.handle_errors(log_data,fh)
 
             #send logs to be read by log_reader and send one by one to ioc_extractor to get IOCs
-            else:
-                for lineno,extracted_iocs in log_reader.parse_logs_static(log_data):             #c.2 
+            else:                                                               
+                for lineno,extracted_iocs in log_reader.parse_logs_static(log_data):             #e.1 
                     output_handler.handle_output(lineno,extracted_iocs,args.format,fh)   
 
 
@@ -141,22 +143,22 @@ try:                                                                         #a.
 
 
 
-#Fatal Error handling
+#c Fatal Error handling
 
-except FileNotFoundError as e:                                                                #a.1
+except FileNotFoundError as e:                                                                #c.1
     print("File not found",e,file=sys.stderr)
     sys.exit(1)
-except PermissionError as e:                                                                  #a.2
+except PermissionError as e:                                                                  #c.2
     print("You don't have permission to read or create files",file=sys.stderr)
     sys.exit(1)
-except IsADirectoryError:
+except IsADirectoryError:                                                                     #c.4
     print("Operation intended to perform on a file is attempted on a Directory",file=sys.stderr)
-except OSError:                                                                               #a.3
+except OSError:                                                                               #c.4
     print("General file I/O Error",file=sys.stderr)
     sys.exit(1)
 
-finally:
-    if fh:
+finally:                                                                                     
+    if fh:                                                                         #d.2
         fh.close()
 
 

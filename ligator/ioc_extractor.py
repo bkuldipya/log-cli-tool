@@ -6,7 +6,7 @@
 
 # **ioc_extractor module tasks:**
 # Performs pattern matching and extraction of Indicators of Compromise (IOCs) from individual log lines.
-# See "docs/ioc_extractor.md" for explanations (comments)
+# See "docs/ioc_extractor.md" for detailed explanations (comments)
 
 
 # In[ ]:
@@ -14,32 +14,33 @@
 
 import re
 
-ssh_pattern = (r"([A-Z][a-z]{2}[ ]+\d+ \d+\:\d+\:\d+) "                                             #1.1
- r"\w+ "                                                                                            #1.2 
- r"(\w+)\[\d+\]\: "                                                                                 #1.3
- r"(failed|accepted) (password|publickey) (?:for invalid user|for user|for) (\w+) from (\d+\.\d+\.\d+\.\d+) port \d+ \w+"  #1.4 #1.4.U#changed             
+#(a) comments for patterns
+ssh_pattern = (r"([A-Z][a-z]{2}[ ]+\d+ \d+\:\d+\:\d+) "                                             #a.1
+ r"\w+ "                                                                                            #a.2 
+ r"(\w+)\[\d+\]\: "                                                                                 #a.3
+ r"(failed|accepted) (password|publickey) (?:for invalid user|for user|for) (\w+) from (\d+\.\d+\.\d+\.\d+) port \d+ \w+"  #a.4 #a.5             
 ) 
 
-
-def extract_iocs(log_line):                                                                      #3.1
-    extracted_iocs = {}                                                                                         #3.2
+#(b) comments for function
+def extract_iocs(log_line):                                                                      #b.1
+    extracted_iocs = {}                                                                          #b.2
     match_ssh = re.search(ssh_pattern,log_line,flags=re.IGNORECASE)
 
 
     if match_ssh:
-        extracted_iocs["auth_status"] = str(match_ssh.group(3))
+        extracted_iocs["auth_status"] = str(match_ssh.group(3))                                 #b.3
         extracted_iocs["auth_methods"] = str(match_ssh.group(4))
         extracted_iocs["username"] = str(match_ssh.group(5))
         extracted_iocs["ip"] = str(match_ssh.group(6))
         extracted_iocs["timestamp"] = str(match_ssh.group(1))
         extracted_iocs["log_source"] = str(match_ssh.group(2))
-                                                           #3.3
 
 
 
-    if extracted_iocs:                                                                                          #3.4
+
+    if extracted_iocs:                                                                          #b.4
         return extracted_iocs
-    else:                                                                                          #3.5
+    else:                                                                                       #b.5
         return None
 
 
