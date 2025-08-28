@@ -18,30 +18,28 @@ Output - dictionary containing iocs<br>
 
 ---
 ### Comments
-If there is U in the comment no, then that code line has been updated<br>
-\# 1.1 timestamp<br>
-\# 1.2 hostname(name of the computer)<br>
-\# 1.3 service name and service id(pid) also capturing the service to know what type of log<br>
-\# 1.4 log line<br>
-\#1.4.U Extracting Sucessful Login attempts too. <br>
-\#There are two ways a successul authentication can happen<br>
+\#(a) comments for patterns
+\# a.1 timestamp<br>
+\# a.2 hostname(name of the computer)<br>
+\# a.3 service name and service id(pid) also capturing the service to know what type of log<br>
+\# a.4 log line<br>
+\# a.5 Extracting Sucessful Login attempts too. <br> 
+There are two ways a successul authentication can happen<br>
 1. When the client provides the correct password (password-based authentication).<br>
 2. When the client proves ownership of a private key that matches the server's authorized public key (key-based authentication).<br><br>
 
-
-
-\# 2.1 timestamp<br>
-\# 2.2 hostname(name of the computer)<br>
-
-\# 3.1 each log line is a string<br>
-\# 3.2 treat this as a local variable, so as to create a new empty dict everytime for each new log line<br>
-\# 3.3 converting to string so if want to convert to json then the syntax doesn't breaks, as for json key-value pair needed to be of type str<br>
-\# 3.4 if d is not empty then execute (if it is empty means the condition becomes false)<br>
-\# 3.5 returns None, when there is no match<br>
+\# b.1 each log line is a string<br>
+\# b.2 treat this as a local variable, so as to create a new empty dict everytime for each new log line<br>
+\# b.3 converting to string so when the dictionary object gets converted to json then the syntax doesn't breaksbecause json key-value pairs needed to be of type str<br>
+\# b.4 if dictionary object is not empty then execute (if dictionary is empty, then the condition becomes false and will not execute the code inside the if block)<br>
+\# b.5 returns None, when there is no match<br>
 
 ---
 ### Ignore <br>
 \# later implementation, "ignore" for now<br>
+
+\# 2.1 timestamp<br>
+\# 2.2 hostname(name of the computer)<br>
 
 \# sudo_pattern = (r"([A-Z][a-z]{2}[ ]+\d+ \d+\:\d+\:\d+) "     \#2.1 <br>
 \#  r"\w+ "                                                     \#2.2 <br>
