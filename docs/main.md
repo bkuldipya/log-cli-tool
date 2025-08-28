@@ -29,7 +29,8 @@ a namespace object, whose attributes has the same name as the argument name defi
 \# c.4 If there is a general error problem, then print error, and return 1.<br><br>
 
 \# d code outside modes<br>
-\# d.1 opening output file here if given by the user (opening manually so as to not to duplicate any code), also opening the file once so the efficiency of program gets improved<br><br>
+\# d.1 opening output file here if given by the user (opening manually so as to not to duplicate any code), also opening the file once so the efficiency of program gets improved<br>
+\# d.2 finally block gets executed even after sys.exit() gets run. So the file will get closed always.<br><br>
 
 \# e code inside modes<br>
 \# e.1 Read the log_reader module comments to know more. Here, the for loop automatically calls the next() function on the generator
