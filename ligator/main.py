@@ -84,17 +84,26 @@ if len(sys.argv) == 1:                                                       #d.
 
 
 try:                                                                         #a.1
-#checking mode and using the correct module
+
+    #opening output file here if given by the user (opening manually so as to not to duplicate any code
+    fh = None
+    if args.output is not None:
+        fh = open(args.output,"w")
+
+
+    #checking mode and using the correct module
 
     #mode is file
     if args.mode == "file":
         if args.path is not None:
             for lineno,extracted_iocs in log_reader.parse_logs_from_file(args.path):             #c.1  #generator object, you have to force evaluation
-                output_handler.handle_output(lineno,extracted_iocs,args.output,args.format)    #changed
+                output_handler.handle_output(lineno,extracted_iocs,args.format,fh)    #passing file-like object
+
         else:
             print("Provide the path to the log file that you want to parse and extract the IOCs of ssh logs",file=sys.stderr)   #b.1 #b.2
 
         sys.exit(0)                                                        #exit (program ran successfully)
+
 
 
     #mode is journald-static
@@ -108,23 +117,21 @@ try:                                                                         #a.
         else:
             target_source = ["_COMM=sshd","_COMM=sudo"]
 
-
         #get the logs first from the journald
         log_results = journald_fetcher.fetch_journal_logs(*target_source,since=args.since,until=args.until)       #e.2 #e.3
 
-
         for log_data in log_results:
-
             if log_data.startswith("Error"):
-                output_handler.handle_errors(log_data,args.output)
+                output_handler.handle_errors(log_data,fh)
 
             #send logs to be read by log_reader and send one by one to ioc_extractor to get IOCs
             else:
                 for lineno,extracted_iocs in log_reader.parse_logs_static(log_data):             #c.2 
-                    output_handler.handle_output(lineno,extracted_iocs,args.output,args.format)   
+                    output_handler.handle_output(lineno,extracted_iocs,args.format,fh)   
 
 
         sys.exit(0)                                                           #exit (program ran successfully)
+
 
 
     #mode is journald-live
@@ -140,12 +147,16 @@ except FileNotFoundError as e:                                                  
     print("File not found",e,file=sys.stderr)
     sys.exit(1)
 except PermissionError as e:                                                                  #a.2
-    print("you don't have permission to read or create files",file=sys.stderr)
+    print("You don't have permission to read or create files",file=sys.stderr)
     sys.exit(1)
+except IsADirectoryError:
+    print("Operation intended to perform on a file is attempted on a Directory",file=sys.stderr)
 except OSError:                                                                               #a.3
     print("General file I/O Error",file=sys.stderr)
     sys.exit(1)
 
-
+finally:
+    if fh:
+        fh.close()
 
 

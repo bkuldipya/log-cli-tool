@@ -18,10 +18,10 @@ import ioc_extractor
 def parse_logs_from_file(file_path):                                                   #1.1 #1.2         
     with open(file_path,'r') as f:                                               #E.1
         for lineno,log_line in enumerate(f.readlines(), start=1):                   #2.1    #changed #2.1.U     
-            if len(log_line) == 0:                                                   #3.3
+            if len(log_line.strip()) == 0:                                                   #3.3
                 continue
             try:
-                extracted_iocs = ioc_extractor.extract_iocs(log_line)                    #2.2  #E.2
+                extracted_iocs = ioc_extractor.extract_iocs(log_line.strip())                    #2.2  #E.2
                 if extracted_iocs is not None:
                     yield (lineno, extracted_iocs)                                     #changed 
             except TypeError as e:
