@@ -43,25 +43,16 @@ def print_output(lineno,extracted_iocs,format):
         print(json.dumps(extracted_iocs,indent=4))                                    
 
     elif format=="text":   
-        print(f"Line No: {lineno}\n",
-             f'   auth_status: {extracted_iocs["auth_status"]}\n',
-             f'   auth_methods: {extracted_iocs["auth_methods"]}\n', 
-             f'   username: {extracted_iocs["username"]}\n',
-             f'   ip: {extracted_iocs["ip"]}\n',
-             f'   timestamp: {extracted_iocs["timestamp"]}\n',
-             f'   log_source: {extracted_iocs["log_source"]}'
-             )
+        print(f"Line No: {lineno}")
+        for k,v in extracted_iocs.items():                                     #c.3
+            print(f"    {k}: {v}")
 
     else:                                                                      #format is text-compact
-        print(f'[{lineno}]', 
-              f'{extracted_iocs["timestamp"]} |', 
-              f'{extracted_iocs["log_source"]} |',
-              f'status={extracted_iocs["auth_status"]} |',
-              f'method={extracted_iocs["auth_methods"]} |',
-              f'user={extracted_iocs["username"]} |',
-              f'ip={extracted_iocs["ip"]}',
-              sep=' '
-             )
+        print(f'[{lineno}]',end=" ")
+        for k,v in extracted_iocs.items():
+            print(f"{k}={v}|",end="")
+        print("")
+
 
 
 #writes to a file 
@@ -75,24 +66,15 @@ def write_output(lineno,extracted_iocs,format,fh):
         fh.write(json.dumps(extracted_iocs,indent=4)+"\n")
 
     elif format=="text":   
-        fh.write((f"Line No: {lineno}\n"                                         #d.2
-               f'   auth_status: {extracted_iocs["auth_status"]}\n'
-               f'   auth_status: {extracted_iocs["auth_status"]}\n'
-               f'   auth_status: {extracted_iocs["auth_status"]}\n'
-               f'   auth_methods: {extracted_iocs["auth_methods"]}\n'
-               f'   username: {extracted_iocs["username"]}\n'
-               f'   ip: {extracted_iocs["ip"]}\n'
-               f'   timestamp: {extracted_iocs["timestamp"]}\n'
-               f'   log_source: {extracted_iocs["log_source"]}\n'))
+        fh.write(f"Line No: {lineno}\n")                                         #d.2
+        for k,v in extracted_iocs.items():
+            fh.write(f"    {k}: {v}\n")
 
     else:                                                                        #format is compact
-        fh.write((f'[{lineno}] '
-               f'{extracted_iocs["timestamp"]} | '
-               f'{extracted_iocs["log_source"]} | '
-               f'status={extracted_iocs["auth_status"]} | '
-               f'method={extracted_iocs["auth_methods"]} | '
-               f'user={extracted_iocs["username"]} | '
-               f'ip={extracted_iocs["ip"]}\n'))
+        fh.write(f'[{lineno}] ')
+        for k,v in extracted_iocs.items(): 
+            fh.write(f"{k}={v}|")
+        fh.write("\n")    
 
 
 
