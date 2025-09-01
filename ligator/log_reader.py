@@ -1,15 +1,8 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
 
 
 #**log_reader module tasks:**
 # Reads raw logs from static sources and feeds them log_line-by-log_line for IOC extraction.
 # See "docs/log_reader.md" for explanations (comments)
-
-
-# In[ ]:
 
 
 import sys

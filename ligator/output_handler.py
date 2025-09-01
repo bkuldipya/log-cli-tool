@@ -1,15 +1,9 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
 
 
 # **output_handler module** 
 # Manages output of extracted data or errors.
 # See "docs/output_handler.md" for explanations (comments)
 
-
-# In[ ]:
 
 
 import json

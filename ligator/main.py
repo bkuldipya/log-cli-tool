@@ -1,15 +1,8 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
 
 # **main module**<br>
 # Acts as the command-line interface (CLI) controller.<br>
 # See "docs/main.md" for explanations (comments)
 
-
-# In[ ]:
 
 
 import sys

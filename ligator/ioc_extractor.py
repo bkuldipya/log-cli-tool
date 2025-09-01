@@ -1,15 +1,9 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
 
 
 # **ioc_extractor module tasks:**
 # Performs pattern matching and extraction of Indicators of Compromise (IOCs) from individual log lines.
 # See "docs/ioc_extractor.md" for detailed explanations (comments)
 
-
-# In[ ]:
 
 
 import re

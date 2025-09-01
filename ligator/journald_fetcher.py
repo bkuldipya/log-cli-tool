@@ -1,7 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
 
 
 # See "docs/journald_fetcher.md" for explanations (comments)
