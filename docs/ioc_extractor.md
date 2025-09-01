@@ -19,36 +19,18 @@ Output - dictionary containing iocs<br>
 ---
 ### Comments
 \#(a) comments for patterns
-\# a.1 timestamp<br>
-\# a.2 hostname(name of the computer)<br>
-\# a.3 service name and service id(pid) also capturing the service to know what type of log<br>
-\# a.4 log line<br>
-\# a.5 Extracting Sucessful Login attempts too. <br> 
+\# a.1 Compiling it first. When we import this module, python automatically runs the top-level code (executes variables, function definitions and regex compilation). In this case, the regex gets precompiled (python creates an internal regex object) and save it to memory to be used later by any program, thus saving the time.<br>
 There are two ways a successul authentication can happen<br>
 1. When the client provides the correct password (password-based authentication).<br>
 2. When the client proves ownership of a private key that matches the server's authorized public key (key-based authentication).<br><br>
 
 \# b.1 each log line is a string<br>
 \# b.2 treat this as a local variable, so as to create a new empty dict everytime for each new log line<br>
-\# b.3 converting to string so when the dictionary object gets converted to json then the syntax doesn't breaksbecause json key-value pairs needed to be of type str<br>
+\# b.3 matchobject.groupdict() returns a dictionary. Keys = the names of the named capturing groups in your regex. Values = the substrings actually matched by those groups. dictobject.items() returns a viewobject of the dictionary. When you iterate over this view object you get 2 element tuples of (key,value). Also I'm using dictionary comprehension, so that any named capturing group if it is not present in the match then that can be skipped (for sudo logs, specially) <br>
 \# b.4 if dictionary object is not empty then execute (if dictionary is empty, then the condition becomes false and will not execute the code inside the if block)<br>
 \# b.5 returns None, when there is no match<br>
 
 ---
-### Ignore <br>
-\# later implementation, "ignore" for now<br>
 
-\# 2.1 timestamp<br>
-\# 2.2 hostname(name of the computer)<br>
-
-\# sudo_pattern = (r"([A-Z][a-z]{2}[ ]+\d+ \d+\:\d+\:\d+) "     \#2.1 <br>
-\#  r"\w+ "                                                     \#2.2 <br>
-\#  r"sudo\[\d+\]\:[ \t]"                     <br>
-\#  r"[^;]+\;[^;]+\;[^;]+\;[ \t]COMMAND=(.*)" <br> 
-\# )                                          <br>
-
-\# match_sudo = re.search(sudo_pattern,log_line,flags=re.IGNORECASE)<br>
-\#  elif match_sudo:<br>
-\#         d["command"]=str(match_sudo.group(2))<br>
        
   
