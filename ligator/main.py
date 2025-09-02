@@ -17,7 +17,10 @@ parser = argparse.ArgumentParser(description="Log Investigator CLI Tool",
                                 formatter_class=argparse.RawTextHelpFormatter)                  #a.1  #a.2  #a.3
 
 
-parser.add_argument(
+#Mode and input group (Specify the source)
+source_group = parser.add_argument_group("Source Options")
+
+source_group.add_argument(
     "--mode",
     choices=["file","journald-static","journald-live"],
     help=('mode selection: \n'
@@ -26,12 +29,17 @@ parser.add_argument(
     '    "journald-live" for live streaming logs'),    
     type=str
 )
-parser.add_argument(
+source_group.add_argument(
     "--path",
     help='path to the log file (required for "file" mode)',
     type=str
 )
-parser.add_argument(
+
+
+#Log filters
+filter_group = parser.add_argument_group("Log Filtering Options","To be used only in the journald mode")
+
+filter_group.add_argument(
     "--service",
     help=('Specify which service logs to analyze:\n'                                                 #a.3
     '    "ssh" for SSH login attempts\n'
@@ -40,22 +48,26 @@ parser.add_argument(
     choices=['ssh','sudo'],
     type=str
 )        
-parser.add_argument(
+filter_group.add_argument(
     "--since",
     help='start time filter (same format as journalctl, e.g. "YYYY-MM-DD HH:MM:SS"or "today" or "yesterday")',
     type=str
 )
-parser.add_argument(
+filter_group.add_argument(
     "--until",
     help='end time filter(same format as journalctl, e.g. "YYYY-MM-DD HH:MM:SS" or "today" or "yesterday")',
     type=str
 )
-parser.add_argument(
+
+#Output and Format group
+output_group = parser.add_argument_group("Output Options")
+
+output_group.add_argument(
     "--output",
     help="choose where to save the extracted IOCS (provide a filename)",
     type=str
 )
-parser.add_argument(
+output_group.add_argument(
     "--format",
     choices = ['ndjson','ndjson-pretty','text','text-compact'],
     default = 'ndjson',
