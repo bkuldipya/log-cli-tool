@@ -14,7 +14,7 @@ Currently supports **SSH and Sudo log analysis**.
 - Supports multiple modes:
   - **File mode**: Parse saved log files.
   - **Journald (static)**: Analyze stored journald logs (`journalctl`).
-  - **Journald (live)**: *(planned)* Stream logs in real time.
+
 - Output options:
   - Print extracted IOCs to screen
   - Save results to a file 
@@ -97,7 +97,7 @@ log-investigator-cli/           # Repo root (GitHub Repo Name)
 ## 🔮 Roadmap
 1. SSH failed login IOC extraction ✅ 
 2. Sudo log parsing ✅
-3. Live journald streaming mode ⏳
+
 
 ---
  
